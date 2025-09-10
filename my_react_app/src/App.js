@@ -8,6 +8,8 @@ import Greet from './components/Greet';
 import jennaImg from './/img/jenna.avif';
 import Header from "./components/Header";
 import Article from "./components/Article";
+import Counter from './components/Counter';
+
 
 <HelloWithProps 
   to="Allievo" 
@@ -47,6 +49,10 @@ function App() {
         exclamationNumber={10} 
         img={jennaImg} 
       />
+
+      {/* Counter richiesto nell’esercizio */}
+      <h2>Counter demo</h2>
+      <Counter />
 
     </div>
     
