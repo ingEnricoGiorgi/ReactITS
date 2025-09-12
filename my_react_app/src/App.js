@@ -10,6 +10,9 @@ import Header from "./components/Header";
 import Article from "./components/Article";
 import Counter from './components/Counter';
 
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Home from "./pages/Home";
+import CoinPage from "./pages/CoinPage";
 
 <HelloWithProps 
   to="Allievo" 
@@ -18,7 +21,17 @@ import Counter from './components/Counter';
   img={jennaImg} 
 />
 
-
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/coin" element={<CoinPage />} />
+      </Routes>
+    </Router>
+  );
+}
+/*
 function App() {
   return (
     <div className="App">
@@ -50,13 +63,14 @@ function App() {
         img={jennaImg} 
       />
 
-      {/* Counter richiesto nell’esercizio */}
+
       <h2>Counter demo</h2>
       <Counter />
 
     </div>
+  
     
   );
 }
-
+*/
 export default App;
