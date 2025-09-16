@@ -13,7 +13,8 @@ import Counter from './components/Counter';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import CoinPage from "./pages/CoinPage";
-import FeedbackApp from './pages/FeedbackZio';
+import FeedbackApp from './pages/FeedbackPages';
+import CustomApp from './pages/CustomApp';
 
 <HelloWithProps 
   to="Allievo" 
@@ -29,6 +30,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/coin" element={<CoinPage />} />
         <Route path="/feedback" element={<FeedbackApp />} />
+        <Route path="/custom" element={<CustomApp />} />
       </Routes>
     </Router>
   );
