@@ -2,7 +2,7 @@ import { useState } from "react";
 import AddTodo  from "../components/AddToDo";
 import TodoList from "../components/ToDoList";
 
-export default function CustomApp() {
+export default function ToDoApp() {
   const [todos, setTodos] = useState([
     { id: 1, title: "Studiare React", done: false },
     { id: 2, title: "Fare la spesa", done: true },
