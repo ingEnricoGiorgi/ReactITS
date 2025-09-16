@@ -7,7 +7,7 @@ export default function Home() {
       <h1>Benvenuto</h1>
       <p>Vai alla <Link to="/coin">Coin Flipper</Link></p>
       <p>Vai alla <Link to="/feedback">Feedback</Link></p>
-      <p>Vai alla <Link to="custom">CustomApp</Link></p>
+      <p>Vai alla <Link to="/custom">CustomApp</Link></p>
     </div>
   );
 }
