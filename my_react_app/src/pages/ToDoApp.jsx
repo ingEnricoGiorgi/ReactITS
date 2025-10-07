@@ -1,45 +1,61 @@
-import { useState } from "react";
-import AddTodo  from "../components/AddToDo";
-import TodoList from "../components/ToDoList";
+import React from "react";
+import TodoList from "../components/todoList";
+import AddTodo from "../components/addTodo";
+import FilterTodo from "../components/filterTodo";
 
-export default function ToDoApp() {
-  const [todos, setTodos] = useState([
-    { id: 1, title: "Studiare React", done: false },
-    { id: 2, title: "Fare la spesa", done: true },
-  ]);
-  const [filterText, setFilterText] = useState("");
+class TodoApp extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            todos: ["scatola", "scrivania", "skibbybobbidy", "forzanapoli"]
+        };
+        this.addTodo = this.addTodo.bind(this)
+        this.deleteTodo = this.deleteTodo.bind(this)
+        this.filterTodo = this.filterTodo.bind(this)
+    }
 
-  const onAdd = (title) =>
-    setTodos(t => [...t, { id: Date.now(), title, done: false }]);
+    deleteTodo(index) {
+        let currentTodos = [...this.state.todos]
+        currentTodos.splice(index, 1)
+        this.setState(
+            { todos: currentTodos}
+        )
+    }
 
-  const onToggle = (id) =>
-    setTodos(t => t.map(x => x.id === id ? { ...x, done: !x.done } : x));
+    addTodo(todo) {
+        let currentTodos = [...this.state.todos]
+        currentTodos.push(todo)
+        this.setState(
+            { todos: currentTodos}
+        )
+    }
 
-  const onDelete = (id) =>
-    setTodos(t => t.filter(x => x.id !== id));
+    filterTodo(filterText) {
+        let currentTodos = [...this.state.todos]
+        let filteredTodos = currentTodos.filter((value) => value.toLowerCase().includes(filterText.toLowerCase()))
+        this.setState(
+            { todos: filteredTodos}
+        )
+    }
 
-  const visible = todos.filter(t =>
-    t.title.toLowerCase().includes(filterText.toLowerCase())
-  );
-
+render() {
   return (
-    <main style={{ maxWidth: 560, margin: "40px auto", padding: 16 }}>
-      <h1>TodoApp</h1>
-
-      <AddTodo onAdd={onAdd} />
-
-      <input
-        placeholder="Filtra…"
-        value={filterText}
-        onChange={e => setFilterText(e.target.value)}
-        style={{ width: "100%", padding: 8, margin: "12px 0" }}
-      />
-
-      <TodoList
-        todos={visible}
-        onToggle={onToggle}
-        onDelete={onDelete}
-      />
-    </main>
+    <div
+      style={{
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    marginTop: "1vh"
+      }}
+    >
+      <h1>Todo App</h1>
+      <FilterTodo filterTodo={this.filterTodo} />
+      <TodoList todos={this.state.todos} deleteTodo={this.deleteTodo} />
+      <AddTodo addTodo={this.addTodo} />
+    </div>
   );
 }
+
+}
+
+export default TodoApp;

@@ -1,34 +1,15 @@
-// src/App.js
-import logo from './logo.svg';
 import './App.css';
-import HelloWithProps from './components/HelloWithProps';
-import jennaImg from './/img/jenna.avif';
-
-
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
-import CoinPage from "./pages/CoinPage";
-import FeedbackApp from './pages/FeedbackPages';
-import CustomApp from './pages/ToDoApp';
+import TodoApp from "./pages/todoApp";
 
-<HelloWithProps 
-  to="Allievo" 
-  from="zio" 
-  exclamationNumber={10} 
-  img={jennaImg} 
-/>
-
-function App() {
+export default function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/coin" element={<CoinPage />} />
-        <Route path="/feedback" element={<FeedbackApp />} />
-        <Route path="/custom" element={<CustomApp />} />
+        {/* Rotta principale → mostra direttamente la ToDoApp */}
+        <Route path="/" element={<TodoApp />} />
       </Routes>
     </Router>
   );
 }
-
-export default App;
