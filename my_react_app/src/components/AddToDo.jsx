@@ -1,16 +1,27 @@
+import React, { useState } from "react";
 
-function AddTodo(props) {
-    function handleClick() {
-        const newTodo = document.getElementById("input").value
-        document.getElementById("input").value = ""
-        props.addTodo(newTodo)
-    }
-    return(
-        <div>
-            <input id="input" type="text" placeholder="New todo..." />
-            <button onClick={handleClick}>Add</button>
-        </div>
-    )
+export default function AddToDo({ onAdd }) {
+  const [value, setValue] = useState("");
+
+  function handleAdd() {
+    onAdd(value);
+    setValue("");
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === "Enter") handleAdd();
+  }
+
+  return (
+    <div style={{ marginTop: 12 }}>
+      <input
+        type="text"
+        placeholder="New todo..."
+        value={value}
+        onChange={e => setValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+      />
+      <button onClick={handleAdd} style={{ marginLeft: 6 }}>Add</button>
+    </div>
+  );
 }
-
-export default AddTodo;

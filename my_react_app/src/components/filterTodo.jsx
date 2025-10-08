@@ -1,13 +1,14 @@
-function FilterTodo(props) {
-    function handleChange() {
-        const filterText = document.getElementById("filter").value
-        props.filterTodo(filterText)
-    }
-    return(
-        <div>
-            <input id="filter" type="text" placeholder="Filter todos..." onChange={handleChange} />
-        </div>
-    )
-}
+import React from "react";
 
-export default FilterTodo;
+export default function FilterToDo({ value, onChange }) {
+  return (
+    <div style={{ marginBottom: 10 }}>
+      <input
+        type="text"
+        placeholder="Filter todos..."
+        value={value}
+        onChange={e => onChange(e.target.value)}
+      />
+    </div>
+  );
+}

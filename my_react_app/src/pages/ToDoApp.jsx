@@ -1,61 +1,65 @@
-import React from "react";
-import TodoList from "../components/todoList";
-import AddTodo from "../components/addTodo";
-import FilterTodo from "../components/filterTodo";
+import React, { useEffect, useMemo, useState } from "react";
+import TodoList from "../components/ToDoList";
+import AddTodo from "../components/AddToDo";
+import FilterTodo from "../components/FilterToDo";
 
-class TodoApp extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            todos: ["scatola", "scrivania", "skibbybobbidy", "forzanapoli"]
-        };
-        this.addTodo = this.addTodo.bind(this)
-        this.deleteTodo = this.deleteTodo.bind(this)
-        this.filterTodo = this.filterTodo.bind(this)
-    }
+export default function ToDoApp() {
+  // stato
+  const [allTodos, setAllTodos] = useState(() => {
+    // inizializza da localStorage se presente
+    const saved = localStorage.getItem("todos");
+    return saved ? JSON.parse(saved) : ["scatola", "scrivania", "skibbybobbidy", "forzanapoli"];
+  });
+  const [filterText, setFilterText] = useState("");
 
-    deleteTodo(index) {
-        let currentTodos = [...this.state.todos]
-        currentTodos.splice(index, 1)
-        this.setState(
-            { todos: currentTodos}
-        )
-    }
+  // effetti
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(allTodos));
+  }, [allTodos]); // salva ogni volta che cambia la lista
 
-    addTodo(todo) {
-        let currentTodos = [...this.state.todos]
-        currentTodos.push(todo)
-        this.setState(
-            { todos: currentTodos}
-        )
-    }
+  // lista visibile calcolata (memo per evitare ricalcoli inutili)
+  const visibleTodos = useMemo(() => {
+    if (!filterText) return allTodos;
+    const q = filterText.toLowerCase();
+    return allTodos.filter(v => v.toLowerCase().includes(q));
+  }, [allTodos, filterText]);
 
-    filterTodo(filterText) {
-        let currentTodos = [...this.state.todos]
-        let filteredTodos = currentTodos.filter((value) => value.toLowerCase().includes(filterText.toLowerCase()))
-        this.setState(
-            { todos: filteredTodos}
-        )
-    }
+  // azioni
+  function addTodo(todo) {
+    const t = (todo || "").trim();
+    if (!t) return;
+    setAllTodos(prev => [...prev, t]);
+  }
 
-render() {
+  function deleteTodo(indexInVisible) {
+    const toDelete = visibleTodos[indexInVisible];
+    // rimuove SOLO la prima occorrenza uguale
+    let removed = false;
+    setAllTodos(prev =>
+      prev.filter(v => {
+        if (!removed && v === toDelete) {
+          removed = true;
+          return false;
+        }
+        return true;
+      })
+    );
+  }
+
   return (
     <div
       style={{
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    marginTop: "1vh"
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        //justifyContent: "center"
       }}
     >
       <h1>Todo App</h1>
-      <FilterTodo filterTodo={this.filterTodo} />
-      <TodoList todos={this.state.todos} deleteTodo={this.deleteTodo} />
-      <AddTodo addTodo={this.addTodo} />
+      <FilterTodo value={filterText} onChange={setFilterText} />
+      <TodoList todos={visibleTodos} onDelete={deleteTodo} />
+      <AddTodo onAdd={addTodo} />
     </div>
   );
 }
-
-}
-
-export default TodoApp;

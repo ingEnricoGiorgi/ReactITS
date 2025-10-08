@@ -1,15 +1,12 @@
-function TodoItem(props) {
-    function deleteCurrent() {
-        props.deleteTodo(props.index)
-    }
-    return(
-        <li>
-            <div>
-                {props.item + props.index + "  "}
-                <button  onClick={deleteCurrent}>Delete</button>
-            </div>
-        </li>
-    )
-}
+import React from "react";
 
-export default TodoItem;
+export default function ToDoItem({ item, index, onDelete }) {
+  return (
+    <li>
+      <span>{item}</span>
+      <button onClick={() => onDelete(index)} style={{ marginLeft: 8 }}>
+        Delete
+      </button>
+    </li>
+  );
+}
