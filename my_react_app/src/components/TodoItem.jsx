@@ -1,23 +1,12 @@
-export default function TodoItem({ todo, onToggle, onDelete }) {
+import React from "react";
+
+export default function ToDoItem({ item, index, onDelete }) {
   return (
-    <li
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 8,
-        padding: "8px 0",
-        borderBottom: "1px solid #eee",
-      }}
-    >
-      <input
-        type="checkbox"
-        checked={todo.done}
-        onChange={() => onToggle(todo.id)}
-      />
-      <span style={{ flex: 1, textDecoration: todo.done ? "line-through" : "none" }}>
-        {todo.title}
-      </span>
-      <button onClick={() => onDelete(todo.id)} aria-label="Delete">✕</button>
+    <li>
+      <span>{item}</span>
+      <button onClick={() => onDelete(index)} style={{ marginLeft: 8 }}>
+        Delete
+      </button>
     </li>
   );
 }

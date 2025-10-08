@@ -1,16 +1,11 @@
-import TodoItem from "./TodoItem";
+import React from "react";
+import TodoItem from "./ToDoItem";
 
-export default function TodoList({ todos, onToggle, onDelete }) {
-  if (!todos.length) return <p>Nessun risultato.</p>;
+export default function ToDoList({ todos, onDelete }) {
   return (
-    <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-      {todos.map(t => (
-        <TodoItem
-          key={t.id}
-          todo={t}
-          onToggle={onToggle}
-          onDelete={onDelete}
-        />
+    <ul style={{ margin: 0, paddingLeft: 18 }}>
+      {todos.map((value, index) => (
+        <TodoItem key={index} item={value} index={index} onDelete={onDelete} />
       ))}
     </ul>
   );

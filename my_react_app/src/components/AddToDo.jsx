@@ -1,25 +1,27 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
-export default function AddTodo({ onAdd }) {
-  const [title, setTitle] = useState("");
+export default function AddToDo({ onAdd }) {
+  const [value, setValue] = useState("");
 
-  function submit(e) {
-    e.preventDefault();
-    const t = title.trim();
-    if (!t) return;
-    onAdd(t);
-    setTitle("");
+  function handleAdd() {
+    onAdd(value);
+    setValue("");
+  }
+
+  function handleKeyDown(e) {
+    if (e.key === "Enter") handleAdd();
   }
 
   return (
-    <form onSubmit={submit} style={{ display: "flex", gap: 8 }}>
+    <div style={{ marginTop: 12 }}>
       <input
-        value={title}
-        onChange={e => setTitle(e.target.value)}
-        placeholder="Nuovo todo"
-        style={{ flex: 1, padding: 8 }}
+        type="text"
+        placeholder="New todo..."
+        value={value}
+        onChange={e => setValue(e.target.value)}
+        onKeyDown={handleKeyDown}
       />
-      <button>Aggiungi</button>
-    </form>
+      <button onClick={handleAdd} style={{ marginLeft: 6 }}>Add</button>
+    </div>
   );
 }

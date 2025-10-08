@@ -1,45 +1,65 @@
-import { useState } from "react";
-import AddTodo  from "../components/AddToDo";
+import React, { useEffect, useMemo, useState } from "react";
 import TodoList from "../components/ToDoList";
+import AddTodo from "../components/AddToDo";
+import FilterTodo from "../components/FilterToDo";
 
 export default function ToDoApp() {
-  const [todos, setTodos] = useState([
-    { id: 1, title: "Studiare React", done: false },
-    { id: 2, title: "Fare la spesa", done: true },
-  ]);
+  // stato
+  const [allTodos, setAllTodos] = useState(() => {
+    // inizializza da localStorage se presente
+    const saved = localStorage.getItem("todos");
+    return saved ? JSON.parse(saved) : ["scatola", "scrivania", "skibbybobbidy", "forzanapoli"];
+  });
   const [filterText, setFilterText] = useState("");
 
-  const onAdd = (title) =>
-    setTodos(t => [...t, { id: Date.now(), title, done: false }]);
+  // effetti
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(allTodos));
+  }, [allTodos]); // salva ogni volta che cambia la lista
 
-  const onToggle = (id) =>
-    setTodos(t => t.map(x => x.id === id ? { ...x, done: !x.done } : x));
+  // lista visibile calcolata (memo per evitare ricalcoli inutili)
+  const visibleTodos = useMemo(() => {
+    if (!filterText) return allTodos;
+    const q = filterText.toLowerCase();
+    return allTodos.filter(v => v.toLowerCase().includes(q));
+  }, [allTodos, filterText]);
 
-  const onDelete = (id) =>
-    setTodos(t => t.filter(x => x.id !== id));
+  // azioni
+  function addTodo(todo) {
+    const t = (todo || "").trim();
+    if (!t) return;
+    setAllTodos(prev => [...prev, t]);
+  }
 
-  const visible = todos.filter(t =>
-    t.title.toLowerCase().includes(filterText.toLowerCase())
-  );
+  function deleteTodo(indexInVisible) {
+    const toDelete = visibleTodos[indexInVisible];
+    // rimuove SOLO la prima occorrenza uguale
+    let removed = false;
+    setAllTodos(prev =>
+      prev.filter(v => {
+        if (!removed && v === toDelete) {
+          removed = true;
+          return false;
+        }
+        return true;
+      })
+    );
+  }
 
   return (
-    <main style={{ maxWidth: 560, margin: "40px auto", padding: 16 }}>
-      <h1>TodoApp</h1>
-
-      <AddTodo onAdd={onAdd} />
-
-      <input
-        placeholder="Filtra…"
-        value={filterText}
-        onChange={e => setFilterText(e.target.value)}
-        style={{ width: "100%", padding: 8, margin: "12px 0" }}
-      />
-
-      <TodoList
-        todos={visible}
-        onToggle={onToggle}
-        onDelete={onDelete}
-      />
-    </main>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        //justifyContent: "center"
+      }}
+    >
+      <h1>Todo App</h1>
+      <FilterTodo value={filterText} onChange={setFilterText} />
+      <TodoList todos={visibleTodos} onDelete={deleteTodo} />
+      <AddTodo onAdd={addTodo} />
+    </div>
   );
 }
